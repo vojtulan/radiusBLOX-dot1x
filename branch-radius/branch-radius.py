@@ -1,10 +1,8 @@
 import requests
 import json
-from mysql.connector import connect, Error
 import mysql.connector
 import argparse
 from datetime import datetime
-import pprint
 
 log = "log.txt"
 branch = "PCE"
