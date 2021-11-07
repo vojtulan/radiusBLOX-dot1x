@@ -209,6 +209,3 @@ for apiRecord in apiRecords:
 ExecuteSqlQuerries(sqlQuerriesToExexute)
 exit()
         
-
-
-
