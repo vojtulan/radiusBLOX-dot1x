@@ -38,15 +38,32 @@ def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
     requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
-    url = f'https://infoblox.altepro.cz/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
+    url = f'https://infoblox.altepro0.cz/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
 
     try:
-        response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False)
+        response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=5 )
         jsonData = json.loads(response.text)
 
+    except requests.exceptions.HTTPError as error:
+        LogErrorToFile(str(error))
+        exit()
+
+    except requests.exceptions.ConnectionError as error:
+        LogErrorToFile(str(error))
+        exit()
+        
+    except requests.exceptions.Timeout as error:
+        LogErrorToFile(str(error))
+        exit()
+
+    except requests.exceptions.RequestException as error:
+        LogErrorToFile(str(error))
+        exit()
+        
     except:
         LogErrorToFile("Failed to establish connection with API. Quitting ...")
         exit()
+
 
     if not jsonData:
         LogErrorToFile("Response is an empty array.")
