@@ -34,6 +34,10 @@ def ExecuteSqlQuerries(querries):
         
 with open('nas.txt') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=';')
+    if not csv_reader:
+        print("nas.txt is EMPTY, add some clients ...")
+        exit()
+        
     for row in csv_reader:
         ip = row[2]
         name = row[1]
