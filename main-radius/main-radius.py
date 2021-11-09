@@ -187,7 +187,7 @@ for apiRecord in apiRecords:
     existingDbRecordByMacAddress = FindDbRecordByMacAddress(dbRecords, apiRecord.macAddress)
 
     if existingDbRecordByMacAddress == None:
-        
+
         existingDbRecordById = FindDbRecordById(dbRecords, potentiallyAvailableId)
 
         while existingDbRecordById != None:

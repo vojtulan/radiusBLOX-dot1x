@@ -1,5 +1,8 @@
 import mysql.connector
 import csv
+import os
+
+print("Ensure that freeradius-restart.sh is in home directory and has a record in /etc/sudoers.d/ if not just type sudo visudo and add: 'username  ALL=(ALL) NOPASSWD: /home/username/pydatertc.sh'")
 
 log = "log.txt"
 
@@ -40,3 +43,4 @@ with open('nas.txt') as csv_file:
         
 ExecuteSqlQuerries(sqlQuerriesToExexute)
         
+os.system('sudo /home/radius/freeradius-restart.sh')
