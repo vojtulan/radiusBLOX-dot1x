@@ -44,7 +44,6 @@ with open('nas.txt') as csv_file:
             sqlQuerriesToExexute.append(newQuerry)
     except:
         print("Something is not right with the nas file, check it and ensure it is not empty")
-        exit()
         
 ExecuteSqlQuerries(sqlQuerriesToExexute)
 
