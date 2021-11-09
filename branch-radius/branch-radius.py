@@ -5,15 +5,18 @@ import argparse
 from datetime import datetime
 
 log = "log.txt"
-branch = "PCE"
+branch = "branch"
 
-dbUsername ='root'
-dbPassword ='Hu@wei123'
-dbHost ='10.40.0.252'
+dbUsername ='radius'
+dbPassword ='password'
+dbHost ='localhost'
 dbName ='radius'
 
-apiUsername = "api"
-apiKey = "api123"
+infobloxUrl="infoblox.domain.io"
+apiCallTimeout = 5
+
+apiUsername = "apiusername"
+apiKey = "apikey"
 
 class ApiRecord:
   def __init__(self, hostName, macAddress, vlan, location):
@@ -38,10 +41,10 @@ def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
     requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
-    url = f'https://infoblox.altepro0.cz/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
+    url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
 
     try:
-        response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=5 )
+        response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=apiCallTimeout )
         jsonData = json.loads(response.text)
 
     except requests.exceptions.HTTPError as error:

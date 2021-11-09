@@ -7,13 +7,15 @@ from datetime import datetime
 log = "log.txt"
 branch = "PCE"
 
-dbUsername ='root'
-dbPassword ='Hu@wei123'
-dbHost ='10.40.0.253'
+dbUsername ='username'
+dbPassword ='password'
+dbHost ='localhost'
 dbName ='radius'
 
-apiUsername = "api"
-apiKey = "api123"
+infobloxUrl = "infoblox.domain.io"
+
+apiUsername = "apiuser"
+apiKey = "apikey"
 
 class ApiRecord:
   def __init__(self, hostName, macAddress, vlan, location):
@@ -39,7 +41,7 @@ def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
     requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
-    url = f'https://infoblox.altepro.cz/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
+    url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
 
     try:
         response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False)
