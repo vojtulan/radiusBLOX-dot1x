@@ -34,6 +34,7 @@ def ExecuteSqlQuerries(querries):
         
 with open('nas.txt') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=';')
+    type(csv_reader)
     if csv_reader == []:
         print("nas.txt is EMPTY, add some clients ...")
         exit()
