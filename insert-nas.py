@@ -34,17 +34,19 @@ def ExecuteSqlQuerries(querries):
         
 with open('nas.txt') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=';')
-    if not csv_reader:
-        print("nas.txt is EMPTY, add some clients ...")
+    
+    try:
+        for row in csv_reader:
+            ip = row[2]
+            name = row[1]
+            location = row[0]
+            newQuerry = f' INSERT INTO nas VALUES (NULL ,  "{ip}",  "{name}",  "other", NULL ,  "{secret}" , NULL , NULL ,  "{location}");'
+            sqlQuerriesToExexute.append(newQuerry)
+    except:
+        print("Something is not right with the nas file, check it and ensure it is not empty")
         exit()
         
-    for row in csv_reader:
-        ip = row[2]
-        name = row[1]
-        location = row[0]
-        newQuerry = f' INSERT INTO nas VALUES (NULL ,  "{ip}",  "{name}",  "other", NULL ,  "{secret}" , NULL , NULL ,  "{location}");'
-        sqlQuerriesToExexute.append(newQuerry)
-        
 ExecuteSqlQuerries(sqlQuerriesToExexute)
-        
+
+      
 os.system('sudo /home/radius/freeradius-restart.sh')
