@@ -15,7 +15,6 @@ dbName ='radius'
 apiUsername = "api"
 apiKey = "api123"
 
-
 class ApiRecord:
   def __init__(self, hostName, macAddress, vlan, location):
     self.hostName = hostName
