@@ -78,6 +78,8 @@ def GetApiRecord() -> ApiRecord:
         location = object['extattrs']['Lokalita']['value']
         macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
         vlan = object['extattrs']['VLAN']['value']
+        if not vlan:
+            continue
         apiRecords.append(ApiRecord(hostName, macAddress, vlan, location))
 
     return apiRecords
