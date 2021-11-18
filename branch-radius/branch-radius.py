@@ -41,7 +41,7 @@ def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
     requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
-    url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
+    url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_inheritance=True&_return_fields%2B=extattrs&*Lokalita={branch}'
 
     try:
         response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=apiCallTimeout )
@@ -76,7 +76,15 @@ def GetApiRecord() -> ApiRecord:
     for object in jsonData:
         hostName = object['name']
         location = object['extattrs']['Lokalita']['value']
-        macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
+        try:
+            macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
+            
+            if macAddress == "000000000000":
+                continue
+                
+        except:
+            continue
+            
         vlan = object['extattrs']['VLAN']['value']
         if not vlan:
             continue
