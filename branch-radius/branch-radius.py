@@ -12,10 +12,10 @@ dbPassword ='password'
 dbHost ='localhost'
 dbName ='radius'
 
-infobloxUrl="infoblox.domain.io"
+infobloxUrl="pceinfmastermng01.nempk.cz"
 apiCallTimeout = 5
 
-apiUsername = "apiusername"
+apiUsername = "radius"
 apiKey = "apikey"
 
 class ApiRecord:
