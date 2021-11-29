@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime
 
 log = "log.txt"
-branch = "PCE"
+branchList = ["PCE", "OUN", "LIN", "SYN", "CHN"]
 
 dbUsername ='username'
 dbPassword ='password'
@@ -41,27 +41,29 @@ def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
     requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
-    url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_return_fields%2B=extattrs&*Lokalita={branch}'
 
-    try:
-        response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False)
-        jsonData = json.loads(response.text)
+    for branch in branchList:
+        url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_inheritance=True&_max_results=-2000?_return_fields%2B=extattrs&*Lokalita={branch}'
 
-    except:
-        LogErrorToFile("Failed to establish connection with API. Quitting ...")
-        exit()
+        try:
+            response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False)
+            jsonData = json.loads(response.text)
 
-    if not jsonData:
-        LogErrorToFile("Response is an empty array.")
+        except:
+            LogErrorToFile("Failed to establish connection with API. Quitting ...")
+            exit()
 
-    apiRecords = []
+        if not jsonData:
+            LogErrorToFile("Response is an empty array.")
 
-    for object in jsonData:
-        hostName = object['name']
-        location = object['extattrs']['Lokalita']['value']
-        macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
-        vlan = object['extattrs']['VLAN']['value']
-        apiRecords.append(ApiRecord(hostName, macAddress, vlan, location))
+        apiRecords = []
+
+        for object in jsonData:
+            hostName = object['name']
+            location = object['extattrs']['Lokalita']['value']
+            macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
+            vlan = object['extattrs']['VLAN']['value']
+            apiRecords.append(ApiRecord(hostName, macAddress, vlan, location))
 
     return apiRecords
 
@@ -152,8 +154,6 @@ apiRecords = GetApiRecord()
 dbRecords = GetDbRecords()
 sqlQuerriesToExexute = []
 
-#Testing
-#apiRecords.pop(0)
 
 for dbRecord in dbRecords:
     recordExistsInApi = False
