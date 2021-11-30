@@ -12,7 +12,8 @@ dbPassword ='password'
 dbHost ='localhost'
 dbName ='radius'
 
-infobloxUrl = "infoblox.domain.io"
+infobloxUrl = "10.40.0.251"
+apiCallTimeout = 40
 
 apiUsername = "apiuser"
 apiKey = "apikey"
@@ -40,13 +41,16 @@ def LogErrorToFile(error):
 def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
+
+    apiRecords = []
+
     requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
 
     for branch in branchList:
-        url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_inheritance=True&_max_results=-2000?_return_fields%2B=extattrs&*Lokalita={branch}'
+        url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_inheritance=True&_max_results=-3000?_return_fields%2B=extattrs&*Lokalita={branch}'
 
         try:
-            response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False)
+            response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=apiCallTimeout)
             jsonData = json.loads(response.text)
 
         except:
@@ -56,7 +60,6 @@ def GetApiRecord() -> ApiRecord:
         if not jsonData:
             LogErrorToFile("Response is an empty array.")
 
-        apiRecords = []
 
         for object in jsonData:
             hostName = object['name']
@@ -64,7 +67,8 @@ def GetApiRecord() -> ApiRecord:
             macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
             vlan = object['extattrs']['VLAN']['value']
             apiRecords.append(ApiRecord(hostName, macAddress, vlan, location))
-
+            
+            
     return apiRecords
 
 def GetDbRecords() -> DbRecord:
