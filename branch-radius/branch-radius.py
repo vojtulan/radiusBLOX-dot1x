@@ -202,7 +202,7 @@ sqlQuerriesToExexute = []
 vlanList = GetAllVlans()
 for apiRecord in apiRecords:
     if not apiRecord.vlan in vlanList:
-        sqlQuerriesToExexute
+        mysql
         sqlQuerriesToExexute.append(f'insert into radgroupreply (groupname, attribute, op, value) values ("VLAN{apiRecord.vlan}", "Tunnel-Type", "=", "13")')
         sqlQuerriesToExexute.append(f'insert into radgroupreply (groupname, attribute, op, value) values ("VLAN{apiRecord.vlan}", "Tunnel-Medium-Type", "=", "6")')
         sqlQuerriesToExexute.append(f'insert into radgroupreply (groupname, attribute, op, value) values ("VLAN{apiRecord.vlan}", "Tunnel-Private-Group-Id", "=", "{apiRecord.vlan}")')

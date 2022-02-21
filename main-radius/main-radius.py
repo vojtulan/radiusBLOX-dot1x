@@ -180,7 +180,6 @@ sqlQuerriesToExexute = []
 vlanList = GetAllVlans()
 for apiRecord in apiRecords:
     if not apiRecord.vlan in vlanList:
-        sqlQuerriesToExexute
         sqlQuerriesToExexute.append(f'insert into radgroupreply (groupname, attribute, op, value) values ("VLAN{apiRecord.vlan}", "Tunnel-Type", "=", "13")')
         sqlQuerriesToExexute.append(f'insert into radgroupreply (groupname, attribute, op, value) values ("VLAN{apiRecord.vlan}", "Tunnel-Medium-Type", "=", "6")')
         sqlQuerriesToExexute.append(f'insert into radgroupreply (groupname, attribute, op, value) values ("VLAN{apiRecord.vlan}", "Tunnel-Private-Group-Id", "=", "{apiRecord.vlan}")')
@@ -201,7 +200,7 @@ for apiRecord in apiRecords:
             existingDbRecordById = FindDbRecordById(dbRecords, potentiallyAvailableId)
 
         sqlQuerriesToExexute.append(f'INSERT INTO radcheck (id, username, attribute, op, value) VALUES ({potentiallyAvailableId}, "{apiRecord.macAddress}", "Cleartext-Password", ":=", "{apiRecord.macAddress}")')
-        sqlQuerriesToExexute.append(f'INSERT INTO radusergroup (id, username, groupname, priority, location) VALUES ({potentiallyAvailableId}, "{apiRecord.macAddress}", "VLAN{apiRecord.vlan}", "10", "{apiRecord.location}")')
+        sqlQuerriesToExexute.append(f'INSERT INTO radusergroup (id, username, groupname, priority, locati) VALUES ({potentiallyAvailableId}, "{apiRecord.macAddress}", "VLAN{apiRecord.vlan}", "10", "{apiRecord.location}")')
 
         potentiallyAvailableId += 1
 
@@ -211,4 +210,3 @@ for apiRecord in apiRecords:
 
 ExecuteSqlQuerries(sqlQuerriesToExexute)
 exit()
-        
