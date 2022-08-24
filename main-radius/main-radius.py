@@ -38,30 +38,24 @@ def LogErrorToFile(error):
     with open(log, 'a') as logfile:
         logfile.write(time + ": " + error + '\n')
 
+
+
 def GetApiRecord() -> ApiRecord:
 
     print("Getting data from Infoblox API ... ")
 
     apiRecords = []
 
-    requests.packages.urllib3.disable_warnings()  # Disable SSL warnings in requests #
 
-    for branch in branchList:
-        url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_inheritance=True&_max_results=-3000?_return_fields%2B=extattrs&*Lokalita={branch}'
+    #for branch in branchList:
+    #    url = f'https://{infobloxUrl}/wapi/v2.11/record:host?_inheritance=True&_max_results=-3000?_return_fields%2B=extattrs&*Lokalita={branch}'
 
-        try:
-            response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=apiCallTimeout)
-            jsonData = json.loads(response.text)
+    #    try:
+    #response = requests.request("GET", url, auth=(apiUsername, apiKey), verify=False, timeout=apiCallTimeout)
+    jsonData = open("data.json")
+        
 
-        except:
-            LogErrorToFile("Failed to establish connection with API. Quitting ...")
-            exit()
-
-        if not jsonData:
-            LogErrorToFile("Response is an empty array.")
-
-
-        for object in jsonData:
+    for object in jsonData:
             hostName = object['name']
             location = object['extattrs']['Lokalita']['value']
             macAddress = object['ipv4addrs'][0]['mac'].replace(":", "").lower()
